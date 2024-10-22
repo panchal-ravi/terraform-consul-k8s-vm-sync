@@ -1,0 +1,49 @@
+global:
+  enabled: false
+  name: consul
+  logLevel: info
+  image: "hashicorp/consul-enterprise:1.19.2-ent"
+  datacenter: dc1
+  tls:
+    enabled: true
+    enableAutoEncrypt: true
+    caCert:
+      secretName: consul-ca-cert
+      secretKey: tls.crt
+  acls:
+    manageSystemACLs: false
+    bootstrapToken:
+      secretName: consul-bootstrap-acl-token
+      secretKey: token
+  enableConsulNamespaces: true
+  enterpriseLicense:
+    secretName: consul-license
+    secretKey: key
+externalServers:
+  enabled: true
+  hosts: ["10.200.10.188"]
+  grpcPort: 8503
+  tlsServerName: server.dc1.consul
+  # k8sAuthMethodHost: "https://8B85C3FF8B298AE63912A4257A7E8B5B.gr7.ap-southeast-1.eks.amazonaws.com"
+
+syncCatalog:
+  enabled: true
+  toConsul: true
+  toK8S: false
+  logLevel: debug
+  aclSyncToken:
+    secretName: consul-bootstrap-acl-token
+    secretKey: token    
+  addK8SNamespaceSuffix: false
+  syncClusterIPServices: true
+  syncLoadBalancerEndpoints: false
+  ingress:
+    enabled: true
+    loadBalancerIPs: false
+    
+# dns:
+#   enabled: true
+#   enableRedirection: true
+
+connectInject:
+  enabled: false
